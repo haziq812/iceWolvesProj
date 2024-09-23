@@ -34,7 +34,7 @@ class RolesController extends Controller
         $user = $request->user();
 
 
-        $role = Role::first();
+        $role = Role::where('id', 2)->first();
 
         if (!$user) {
             return "User not found.";

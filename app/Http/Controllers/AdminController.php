@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
+use App\Models\MenuItems;
 
 class AdminController extends Controller
 {
@@ -12,7 +13,8 @@ class AdminController extends Controller
     {
         $users = User::with('roles')->get();
         $roles = Role::all();
-        return view('admin.index', compact('users', 'roles'));
+        $menuItems = MenuItems::all();
+        return view('admin.index', compact('users', 'roles', 'menuItems'));
     }
 
     public function assignRole(Request $request, User $user)
@@ -25,5 +27,12 @@ class AdminController extends Controller
     {
         $user->removeRole($request->role);
         return redirect()->back()->with('success', 'Role removed successfully');
+    }
+
+    public function menusetting()
+    {
+        $menuItems = MenuItems::all();
+
+        return view('admin.menusetting', compact('menuItems'));
     }
 }

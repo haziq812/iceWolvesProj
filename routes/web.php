@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\User;
+use App\Http\Controllers\MenuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,17 +21,31 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/create-roles', [RolesController::class, 'createRoles'])->name('roles.create');
-Route::get('/assignRole', [RolesController::class, 'assignRole'])->name('roles.assign');
+Auth::routes();
+
 
 Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+    Route::get('/menusetting', [AdminController::class, 'menusetting'])->name('admin.menusetting');
+    Route::get('/menu', [MenuController::class, 'index'])->name('menu.index');
+    Route::get('/create-roles', [RolesController::class, 'createRoles'])->name('roles.create');
+    Route::get('/assignRole', [RolesController::class, 'assignRole'])->name('roles.assign');
+    Route::get('/createMenu', [MenuController::class, 'createMenu'])->name('menu.assign');
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::post('/admin/assign-role/{user}', [AdminController::class, 'assignRole'])->name('admin.assign-role');
     Route::post('/admin/remove-role/{user}', [AdminController::class, 'removeRole'])->name('admin.remove-role');
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/menu', [MenuController::class, 'index'])->name('menu.index');
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/create-roles', [RolesController::class, 'createRoles'])->name('roles.create');
+    Route::get('/assignRole', [RolesController::class, 'assignRole'])->name('roles.assign');
+    Route::get('/createMenu', [MenuController::class, 'createMenu'])->name('menu.assign');
+});
 
-Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
 
