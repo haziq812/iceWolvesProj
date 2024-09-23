@@ -27,8 +27,12 @@ Auth::routes();
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-    Route::get('/menusetting', [AdminController::class, 'menusetting'])->name('admin.menusetting');
+    Route::get('/deactivedMenu', [AdminController::class, 'deactivedMenu'])->name('admin.deactivedMenu');
     Route::get('/menu', [MenuController::class, 'index'])->name('menu.index');
+    Route::get('/menusetting', [MenuController::class, 'menusetting'])->name('menu.menusetting');
+    Route::post('/activedMenu/{menu}', [MenuController::class, 'activedMenu'])->name('menu.activedMenu');
+    Route::post('/deactivedMenu/{menu}', [MenuController::class, 'deactivedMenu'])->name('menu.deactivedMenu');
+    Route::post('/storeMenu', [MenuController::class, 'storeMenu'])->name('menu.storeMenu');
     Route::get('/create-roles', [RolesController::class, 'createRoles'])->name('roles.create');
     Route::get('/assignRole', [RolesController::class, 'assignRole'])->name('roles.assign');
     Route::get('/createMenu', [MenuController::class, 'createMenu'])->name('menu.assign');

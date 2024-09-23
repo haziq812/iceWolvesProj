@@ -9,7 +9,7 @@ use App\Models\MenuItems;
 
 class AdminController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $users = User::with('roles')->get();
         $roles = Role::all();
@@ -29,10 +29,5 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Role removed successfully');
     }
 
-    public function menusetting()
-    {
-        $menuItems = MenuItems::all();
-
-        return view('admin.menusetting', compact('menuItems'));
-    }
+    
 }

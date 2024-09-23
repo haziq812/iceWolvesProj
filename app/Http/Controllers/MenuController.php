@@ -8,30 +8,58 @@ use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        dd($request->all());
         $menuItems = MenuItems::all(); // Or any query to get your menu items
 
-        
-        return view('/menu', compact('menuItems'));
+        $roles = Role::all();
+        return view('/menu', compact('menuItems', 'roles'));
     }
 
-    public function store(Request $request)
+    public function menusetting()
+    {
+        $menuItems = MenuItems::all();
+        $roles = Role::all();
+        return view('admin.menusetting', compact('menuItems', 'roles'));
+    }
+
+    public function activedMenu(Request $request, MenuItems $menu)
+    {
+        $menu->update(['is_active' => true]);
+
+
+        return redirect()->back()->with('success', 'Role removed successfully');
+    }
+
+    public function deactivedMenu(Request $request, MenuItems $menu)
+    {
+        $menu->update(['is_active' => false]);
+
+
+        return redirect()->back()->with('success', 'Role removed successfully');
+    }
+
+    public function storeMenu(Request $request)
     {
         // Validate the request
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'url' => 'required|url',
-        ]);
-
+        // $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'url' => 'required|url',
+        //     'role_id' => 'required|int',
+        // ]);
+        
+        $roles = Role::where('name', $request->role)->first();
+   
         // Create a new menu item
         $menuItem = MenuItems::create([
             'name' => $request->name,
             'url' => $request->url,
+            'role_id' => $roles->id,
         ]);
 
         // Return a response (you can adjust the response as needed)
-        return response()->json($menuItem, 201);
+        return redirect()->back()->with('success', 'Role assigned successfully');
     }
 
     public function createMenu(Request $request)
