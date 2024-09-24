@@ -27,10 +27,9 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user()->roles;
-        dd($user);
-        $roles = Role::all();
-
-        $menuItems = MenuItems::all();
+        
+        $roles = Role::find($user);
+        $menuItems = MenuItems::where('role_id', $user[0]->id)->get();
         return view('home', compact('menuItems', 'roles'));
     }
 }

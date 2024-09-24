@@ -6,14 +6,17 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use App\Models\MenuItems;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
+        
         $users = User::with('roles')->get();
+        $user = Auth::user()->roles;
         $roles = Role::all();
-        $menuItems = MenuItems::all();
+        $menuItems = MenuItems::where('role_id', $user[0]->id)->get();
         return view('admin.index', compact('users', 'roles', 'menuItems'));
     }
 
