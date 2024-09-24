@@ -74,6 +74,14 @@ body {
   text-transform: uppercase;
 }
 
+#sidebarMenu {
+  transition: transform 0.3s ease;
+}
+
+.sidebar-collapsed {
+  transform: translateX(-100%);
+}
+
 .adjust {
     padding: 0;
     margin: 0;

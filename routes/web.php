@@ -23,6 +23,40 @@ Route::get('/', function () {
 
 Auth::routes();
 
+$authenticatedRoutes = [
+    [
+        'url' => '/home',
+        'controller' => 'HomeController',
+        'action' => 'index',
+        'name' => 'home',
+        'middleware' => ['auth']
+    ],
+    [
+        'url' => '/admin',
+        'controller' => 'AdminController',
+        'action' => 'index',
+        'name' => 'admin.index',
+        'middleware' => ['auth', 'admin']
+    ],
+    // Add more routes as needed
+];
+
+foreach ($authenticatedRoutes as $route) {
+    $controllerName = $route['controller'];
+
+    // Check if the controller already exists
+    if (!file_exists(app_path("Http/Controllers/{$controllerName}.php"))) {
+        // Create the controller using Artisan
+        Artisan::call('make:controller', ['name' => $controllerName]);
+    }
+}
+
+foreach ($authenticatedRoutes as $route) {
+    Route::middleware($route['middleware'])->group(function () use ($route) {
+        Route::get($route['url'], [App\Http\Controllers . '\\' . $route['controller'], $route['action']])->name($route['name']);
+    });
+}
+
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

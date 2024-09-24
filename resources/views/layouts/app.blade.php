@@ -22,22 +22,14 @@
 </head>
 <body>
     <div id="app" class="main">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             
-            <button class="btn btn-primary " type="button" data-bs-toggle="sidebar" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="btn btn-dark " type="button"  id="sidebarToggle">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li>
-                </ul>
-                
+
                 <ul class="navbar-nav ms-auto">
                     @guest
                         @if (Route::has('login'))
@@ -78,7 +70,7 @@
                     @auth
                         @include('menu', ['menuItems' => $menuItems])
                     @endauth
-                    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5">
                         @yield('content')
                     </main>
                 </div>
@@ -94,3 +86,11 @@
     </div>
 </body>
 </html>
+
+<script>
+    $(document).ready(function(){
+        $('#sidebarToggle').click(function(){
+            $('#sidebarMenu').toggleClass('sidebar-collapsed');
+        });
+    });
+</script>
