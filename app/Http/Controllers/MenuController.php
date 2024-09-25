@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\MenuItems;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
+use App\Models\DynamicRoutes;
+
 
 class MenuController extends Controller
 {
@@ -75,5 +77,22 @@ class MenuController extends Controller
         }
 
         return "unsuccessfully!";
+    }
+    
+
+    public function RoutesInsert(Request $request)
+    {
+        
+        DynamicRoutes::create([
+            'url' => '/home',
+            'controller' => 'HomeController',
+            'action' => 'index',
+            'name' => 'home',
+            'middleware' => json_encode(['auth', 'admin']), // Store as JSON
+        ]);
+
+        // Return a response (you can adjust the response as needed)
+        return redirect()->back()->with('success', 'Role assigned successfully');
+        
     }
 }
