@@ -23,43 +23,43 @@ Route::get('/', function () {
 
 Auth::routes();
 
-$authenticatedRoutes = [
-    [
-        'url' => '/home',
-        'controller' => 'HomeController',
-        'action' => 'index',
-        'name' => 'home',
-        'middleware' => ['auth']
-    ],
-    [
-        'url' => '/admin',
-        'controller' => 'AdminController',
-        'action' => 'index',
-        'name' => 'admin.index',
-        'middleware' => ['auth', 'admin']
-    ],
-    // Add more routes as needed
-];
+// $authenticatedRoutes = [
+//     [
+//         'url' => '/home',
+//         'controller' => 'HomeController',
+//         'action' => 'index',
+//         'name' => 'home',
+//         'middleware' => ['auth']
+//     ],
+//     [
+//         'url' => '/admin',
+//         'controller' => 'AdminController',
+//         'action' => 'index',
+//         'name' => 'admin.index',
+//         'middleware' => ['auth', 'admin']
+//     ],
+//     // Add more routes as needed
+// ];
 
-foreach ($authenticatedRoutes as $route) {
-    $controllerName = $route['controller'];
+// foreach ($authenticatedRoutes as $route) {
+//     $controllerName = $route['controller'];
 
-    // Check if the controller already exists
-    if (!file_exists(app_path("Http/Controllers/{$controllerName}.php"))) {
-        // Create the controller using Artisan
-        Artisan::call('make:controller', ['name' => $controllerName]);
-    }
-}
+//     // Check if the controller already exists
+//     if (!file_exists(app_path("Http/Controllers/{$controllerName}.php"))) {
+//         // Create the controller using Artisan
+//         Artisan::call('make:controller', ['name' => $controllerName]);
+//     }
+// }
 
-foreach ($authenticatedRoutes as $route) {
-    Route::middleware($route['middleware'])->group(function () use ($route) {
-        Route::get($route['url'], [App\Http\Controllers . '\\' . $route['controller'], $route['action']])->name($route['name']);
-    });
-}
+// foreach ($authenticatedRoutes as $route) {
+//     Route::middleware($route['middleware'])->group(function () use ($route) {
+//         Route::get($route['url'], [App\Http\Controllers . '\\' . $route['controller'], $route['action']])->name($route['name']);
+//     });
+// }
 
-
-Route::middleware(['auth', 'admin'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/RoutesInsert', [MenuController::class, 'RoutesInsert'])->name('routes.assign');
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/deactivedMenu', [AdminController::class, 'deactivedMenu'])->name('admin.deactivedMenu');
     Route::get('/menu', [MenuController::class, 'index'])->name('menu.index');
@@ -75,7 +75,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/remove-role/{user}', [AdminController::class, 'removeRole'])->name('admin.remove-role');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/menu', [MenuController::class, 'index'])->name('menu.index');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/create-roles', [RolesController::class, 'createRoles'])->name('roles.create');
